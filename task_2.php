@@ -66,15 +66,31 @@ function get_menu_tree($parent_id)
   }
 
   $menu = "";
-  $sqlquery = " SELECT *,c.Name 
-  FROM catetory_relations cr
-  inner join category c on c.id=cr.`categoryId`
-  where ParentcategoryId='" .$parent_id . "' ";
+
+  // if($parent_id == 0)
+  // {
+  //   $sqlquery = "select * from 
+  //   (
+  //   SELECT cr.*,c.Name 
+  //   FROM `catetory_relations` cr 
+  //   inner join category c on c.id=cr.`ParentcategoryId`
+  //   order by `ParentcategoryId` asc
+  //   ) a 
+  //   where a.`categoryId` != a.`ParentcategoryId`";
+  // }
+  // else
+  // {
+    $sqlquery = " SELECT *,c.Name 
+    FROM catetory_relations cr
+    inner join category c on c.id=cr.`categoryId`
+    where ParentcategoryId='" .$parent_id . "' ";
+  //}
+  
 
   $res=mysqli_query($con,$sqlquery);
   while($row=mysqli_fetch_array($res,MYSQLI_ASSOC)) 
   {
-           $menu .="<li><a href=''>".$row['Name']."</a>";
+      $menu .="<li>".$row['Name']."";
        
        $menu .= "<ul>".get_menu_tree($row['categoryId'])."</ul>"; //call  recursively
        
